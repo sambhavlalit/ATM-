@@ -1,0 +1,89 @@
+#include <iostream>
+#include <vector>
+
+class TickTacToe {
+private:
+    std::vector<std::vector<char>> board;
+    char currentPlayer;
+    bool isGameFinished;
+
+    bool checkWin(char player) {
+        // Check rows, columns, and diagonals for a win
+        for (int i = 0; i < 3; ++i) {
+            if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
+                (board[0][i] == player && board[1][i] == player && board[2][i] == player)) {
+                return true;
+            }
+        }
+        if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+            (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
+            return true;
+        }
+        return false;
+    }
+
+    bool checkDraw() {
+        for (const auto &row : board) {
+            for (char cell : row) {
+                if (cell == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+public:
+    TickTacToe() : board(3, std::vector<char>(3, ' ')), currentPlayer('X'), isGameFinished(false) {}
+
+    void printBoard() {
+        for (const auto &row : board) {
+            for (char cell : row) {
+                std::cout << cell << ' ';
+            }
+            std::cout << '\n';
+        }
+    }
+
+    void makeMove(int row, int col) {
+        if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ' || isGameFinished) {
+            std::cout << "Invalid move!\n";
+            return;
+        }
+        board[row][col] = currentPlayer;
+        if (checkWin(currentPlayer)) {
+            std::cout << "Player " << currentPlayer << " wins!\n";
+            isGameFinished = true;
+        } else if (checkDraw()) {
+            std::cout << "It's a draw!\n";
+            isGameFinished = true;
+        } else {
+            switchPlayer();
+        }
+    }
+
+    bool gameFinished() {
+        return isGameFinished;
+    }
+
+    char getCurrentPlayer() {
+        return currentPlayer;
+    }
+};
+
+int main() {
+    TickTacToe game;
+    int row, col;
+    while (!game.gameFinished()) {
+        game.printBoard();
+        std::cout << "Player " << game.getCurrentPlayer() << "'s turn. Enter row and column (0, 1, or 2): ";
+        std::cin >> row >> col;
+        game.makeMove(row, col);
+    }
+    game.printBoard();
+    return 0;
+}
