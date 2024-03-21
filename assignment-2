@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+class GuessTheNumber {
+private:
+    int computerGeneratedNumber;
+    int userGuessedNumber;
+    int attempts;
+
+public:
+    GuessTheNumber() : attempts(0) {
+        std::srand(std::time(0)); // Seed the random number generator
+        computerGeneratedNumber = std::rand() % 100 + 1; // Random number between 1 and 100
+    }
+
+    void generateRandomNumber() {
+        computerGeneratedNumber = std::rand() % 100 + 1;
+    }
+
+    void startGame() {
+        while (userGuessedNumber != computerGeneratedNumber) {
+            std::cout << "Guess a number between 1 and 100: ";
+            std::cin >> userGuessedNumber;
+            attempts++;
+
+            if (userGuessedNumber == computerGeneratedNumber) {
+                std::cout << "\\nYou Guessed Correct! in " << attempts << " attempts!" << std::endl;
+                break;
+            } else if (userGuessedNumber < computerGeneratedNumber) {
+                std::cout << "Go Higher Please!\\n" << std::endl;
+            } else {
+                std::cout << "Go Lower Please!\\n" << std::endl;
+            }
+        }
+    }
+};
+
+int main() {
+    GuessTheNumber game;
+    game.startGame();
+    return 0;
+}
