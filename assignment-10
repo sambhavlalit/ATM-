@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+class Book {
+public:
+ string isbn;
+  string title;
+  string author;
+ 
+  Book(const string& isbn, const string& title, const std::string& author) : isbn(isbn), title(title), author(author) {}
+};
+
+class Library {
+private:
+  vector<Book> books;
+
+public:
+  void addBook(const Book& book) {
+    books.push_back(book);
+  }
+  Book* searchByISBN(const std::string& isbn) const {
+    for (const Book& book : books) {
+      if (book.isbn == isbn) {
+        return const_cast<Book*>(&book);       }
+    }
+    return nullptr; 
+  }
+};
+
+int main() {
+  Library library;
+
+  
+  library.addBook(Book("1234567890123", "The Hitchhiker's Guide to the Galaxy", "Douglas Adams"));
+  library.addBook(Book("9876543210987", "Pride and Prejudice", "Jane Austen"));
+
+
+  string isbn;
+  cout << "Enter ISBN to search: ";
+  getline(std::cin, isbn);
+
+  const Book* book = library.searchByISBN(isbn);
+
+  if (book) {
+    cout << "Book Found:" << std::endl;
+    cout << "  Title: " << book->title << std::endl;
+    cout << "  Author: " << book->author << std::endl;
+  } else {
+    cout << "Book with ISBN '" << isbn << "' not found in the library." << std::endl;
+  }
+  return 0;
+}
