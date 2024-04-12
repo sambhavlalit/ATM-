@@ -1,0 +1,98 @@
+#include<iostream>
+#include <cstring>
+using namespace std;
+class MenuItem {
+public:
+    MenuItem(const char* name, double price) : itemName(name), itemPrice(price) {}
+    virtual void displayInfo() const {
+        cout << itemName << " - $" << fixed << setprecision(2) << itemPrice << endl;
+    }
+protected:
+    char itemName[50];  // Fixed size for simplicity (adjust as needed)
+    double itemPrice;
+};
+class FoodItem : public MenuItem {
+public:
+    FoodItem(const char* name, double price, const char* description = "")
+        : MenuItem(name, price), itemDescription(description) {}
+    void displayInfo() const override {
+        MenuItem::displayInfo();
+        if (strcmp(itemDescription, "") != 0) { // Check for empty description
+            cout << itemDescription << endl;
+        }
+    }
+
+private:
+    char itemDescription[100];  // Fixed size for simplicity (adjust as needed)
+};
+class DrinkItem : public MenuItem {
+public:
+    DrinkItem(const char* name, double price, int volumeMl)
+        : MenuItem(name, price), itemVolumeMl(volumeMl) {}
+    void displayInfo() const override {
+        MenuItem::displayInfo();
+        cout << itemVolumeMl << " ml" << endl;
+    }
+
+private:
+    int itemVolumeMl;
+};
+class OrderItem {
+public:
+    OrderItem(const MenuItem& item, int quantity) : itemRef(item), orderQuantity(quantity) {}
+    double calculateSubtotal() const {
+        return itemRef.itemPrice * orderQuantity;
+    }
+    void displayInfo() const {
+        cout << orderQuantity << " x ";
+        itemRef.displayInfo();
+    }
+
+private:
+    const MenuItem& itemRef; // Reference to the menu item
+    int orderQuantity;
+};
+class Order {
+public:
+    void addItem(const OrderItem& item) {
+        if (numItems < MAX_ORDER_ITEMS) { 
+            orderItems[numItems++] = item;
+        } else {
+            cout << "Error: Maximum order items reached!" << endl;
+        }
+    }
+    double calculateTotal() const {
+        double total = 0.0;
+        for (int i = 0; i < numItems; i++) {
+            total += orderItems[i].calculateSubtotal();
+        }
+        return total;
+    }
+    void displayOrder() const {
+        cout << "Order Items:" << endl;
+        for (int i = 0; i < numItems; i++) {
+            orderItems[i].displayInfo();
+        }
+        cout << "Total: $" << fixed << setprecision(2) << calculateTotal() << endl;
+    }
+
+private:
+    static const int MAX_ORDER_ITEMS = 10; // Define a maximum number of order items
+    OrderItem orderItems[MAX_ORDER_ITEMS];
+    int numItems = 0;
+};
+int main() {
+    FoodItem pizza("Margherita Pizza", 12.99, "Thin crust with tomato sauce, mozzarella, and basil.");
+    DrinkItem soda("Cola", 1.99, 330);
+    FoodItem salad("Greek Salad", 8.50, "Greens, feta cheese, olives, tomatoes, and vinaigrette dressing.");
+    Order customerOrder;
+    customerOrder.addItem(OrderItem(pizza, 1));
+    customerOrder.addItem(OrderItem(soda, 2));
+    customerOrder.addItem(OrderItem(salad, 1)); // May not be added if max items reached
+
+  
+    cout << "Restaurant Billing System" << endl;
+    customerOrder.displayOrder();
+
+    return 0;
+}
