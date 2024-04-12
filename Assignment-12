@@ -2,27 +2,42 @@
 using namespace std;
 class SmallUnit {
 public:
-    SmallUnit(double inches) : value(inches) {}
+    explicit SmallUnit(double inches) : value(inches) {}
     explicit operator double() const {
-        return value / 12.0;  
+        return value / 12.0;
+    }
+    friend ostream& operator<<(ostream& os, const SmallUnit& su) {
+        os << su.value << " inches";
+        return os;
     }
 
 private:
-    double value;  
+    double value;  // Measurement in inches
 };
 class LargerUnit {
 public:
-  
-    LargerUnit(double feet) : value(feet) {}
+    explicit LargerUnit(double feet) : value(feet) {}
+    friend ostream& operator<<(ostream& os, const LargerUnit& lu) {
+        os << lu.value << " feet";
+        return os;
+    }
+    void displayInches() const {
+        cout << value * 12.0 << " inches" << endl;
+    }
+
 private:
-    double value;  
+    double value;  // Measurement in inches (now stored as feet)
 };
+
 int main() {
     SmallUnit su(24.0); // Create a SmallUnit object with 24 inches
-    double feet = static_cast<double>(su);  // Explicit cast for clarity
-    cout << "24 inches is equal to " << feet << " feet." << endl;
-    LargerUnit lu(3.5);
-    cout << "3.5 feet is " << lu.value << " feet." << endl;
+    double feet = static_cast<double>(su);
+    LargerUnit lu(feet);
+
+    cout << "largerUnit_OBJ = smallUnit_OBJ (after conversion):" << endl;
+    cout << lu << endl; 
+    cout << "Displaying measurement in inches using LargerUnit::displayInches():" << endl;
+    lu.displayInches();
 
     return 0;
 }
