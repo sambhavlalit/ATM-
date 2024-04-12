@@ -1,0 +1,33 @@
+#include<iostream>
+using namespace std;
+class ClassA {
+private:
+    int valueA;
+
+public:
+    ClassA(int a) : valueA(a) {}
+    friend int calculateSum(const ClassA& objA, const ClassB& objB);
+};
+
+class ClassB {
+private:
+    int valueB;
+
+public:
+    ClassB(int b) : valueB(b) {}
+    friend int calculateSum(const ClassA& objA, const ClassB& objB);
+};
+
+int calculateSum(const ClassA& objA, const ClassB& objB) {
+    return objA.valueA + objB.valueB;
+}
+
+int main() {
+    ClassA a(5);
+    ClassB b(10);
+
+    int sum = calculateSum(a, b);
+    cout << "Sum: " << sum << endl;
+
+    return 0;
+}
