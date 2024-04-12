@@ -1,0 +1,50 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class StringAnalyzer {
+public:
+    StringAnalyzer(const char* str) {
+        stringLength = strlen(str);
+        stringData = new char[stringLength + 1]; 
+        strcpy(stringData, str); // Copy the string
+    }
+    ~StringAnalyzer() {
+        delete[] stringData;
+    }
+    int countWords() const {
+        int numWords = 0;
+        bool inWord = false;
+
+        for (int i = 0; i < stringLength; i++) {
+            if (isspace(stringData[i])) {
+                if (inWord) {
+                    numWords++; // End of a word
+                }
+                inWord = false; // Not in a word anymore
+            } else {
+                inWord = true; // Start of a word
+            }
+        }
+        if (inWord) {
+            numWords++;
+        }
+
+        return numWords;
+    }
+    void displayString() const {
+        cout << stringData << endl;
+    }
+
+private:
+    int stringLength;
+    char* stringData;
+};
+
+int main() {
+    const char* myString = "This is a string with multiple words.";
+    StringAnalyzer analyzer(myString); 
+    cout << "Number of words: " << analyzer.countWords() << endl;
+    return 0;
+}
