@@ -1,0 +1,108 @@
+#include <iostream>
+
+using namespace std;
+
+const int MATRIX_SIZE = 3;
+
+class Matrix
+{
+public:
+    int matrix[MATRIX_SIZE][MATRIX_SIZE];
+
+    Matrix()
+    {
+        for (int i = 0; i < MATRIX_SIZE; i++)
+        {
+            for (int j = 0; j < MATRIX_SIZE; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+    int getElement(int row, int col) const
+    {
+        if (row >= 0 && row < MATRIX_SIZE && col >= 0 && col < MATRIX_SIZE)
+        {
+            return matrix[row][col];
+        }
+        else
+        {
+            cout << "Invalid element access!" << endl;
+            return -1;
+        }
+    }
+
+    void setElement(int row, int col, int value)
+    {
+        if (row >= 0 && row < MATRIX_SIZE && col >= 0 && col < MATRIX_SIZE)
+        {
+            matrix[row][col] = value;
+        }
+        else
+        {
+            cout << "Invalid element access!" << endl;
+        }
+    }
+
+    Matrix &operator+(const Matrix &other)
+    {
+        for (int i = 0; i < MATRIX_SIZE; i++)
+        {
+            for (int j = 0; j < MATRIX_SIZE; j++)
+            {
+                matrix[i][j] += other.matrix[i][j];
+            }
+        }
+        return *this;
+    }
+
+    void printMatrix() const
+    {
+        for (int i = 0; i < MATRIX_SIZE; i++)
+        {
+            for (int j = 0; j < MATRIX_SIZE; j++)
+            {
+                cout << matrix[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main()
+{
+    Matrix OBJ1, OBJ2;
+
+    OBJ1.setElement(0, 0, 1);
+    OBJ1.setElement(0, 1, 2);
+    OBJ1.setElement(0, 2, 3);
+    OBJ1.setElement(1, 0, 4);
+    OBJ1.setElement(1, 1, 5);
+    OBJ1.setElement(1, 2, 6);
+    OBJ1.setElement(2, 0, 7);
+    OBJ1.setElement(2, 1, 8);
+    OBJ1.setElement(2, 2, 9);
+
+    OBJ2.setElement(0, 0, 10);
+    OBJ2.setElement(0, 1, 11);
+    OBJ2.setElement(0, 2, 12);
+    OBJ2.setElement(1, 0, 13);
+    OBJ2.setElement(1, 1, 14);
+    OBJ2.setElement(1, 2, 15);
+    OBJ2.setElement(2, 0, 16);
+    OBJ2.setElement(2, 1, 17);
+    OBJ2.setElement(2, 2, 18);
+
+    cout << "Matrix OBJ1:" << endl;
+    OBJ1.printMatrix();
+
+    cout << "Matrix OBJ2:" << endl;
+    OBJ2.printMatrix();
+
+    OBJ2 = OBJ1 + OBJ2;
+
+    cout << "Sum of OBJ1 and OBJ2 (stored in OBJ2):" << endl;
+    OBJ2.printMatrix();
+
+    return 0;
+}
